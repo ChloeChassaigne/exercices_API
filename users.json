@@ -1,0 +1,426 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "users",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5000"
+    }
+  ],
+  "paths": {
+    "/user/{userId}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "integer"
+          },
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "description": "ID d'un utilisateur existant"
+        }
+      ],
+      "get": {
+        "summary": "Get User Info by User ID",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "User Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "id": "1111-1111-111",
+                      "FirstName": "Romain",
+                      "LastName": "Chassaigne",
+                      "Address": {
+                        "Number": "77",
+                        "Street": "Chemin de la Butte",
+                        "City": "Toulouse",
+                        "PostCode": 31400
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Not_found"
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "Status": "USER_NOT_FOUND",
+                      "Message": "L'utilisateur demandé n'existe pas"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-users-userId",
+        "description": "Retourne l'information d'un user grace à son user ID"
+      }
+    },
+    "/user/address/{userId}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "description": "ID d'un utilisateur existant"
+        }
+      ],
+      "put": {
+        "summary": "",
+        "operationId": "put-user-userId-address",
+        "responses": {
+          "202": {
+            "description": "Accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "id": "1111-1111-111",
+                      "FirstName": "Romain",
+                      "LastName": "Chassaigne",
+                      "Address": {
+                        "Number": "77",
+                        "Street": "Chemin de la Butte",
+                        "City": "Toulouse",
+                        "PostCode": 31400
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Not_found"
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "Status": "USER_NOT_FOUND",
+                      "Message": "L'utilisateur n'existe pas"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Ajoute une adresse à un utilisateur",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Address"
+              },
+              "examples": {
+                "Example": {
+                  "value": {
+                    "Number": "77",
+                    "Street": "Chemin de la Butte",
+                    "City": "Toulouse",
+                    "PostCode": 31400
+                  }
+                }
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          },
+          "description": ""
+        }
+      }
+    },
+    "/users": {
+      "parameters": [],
+      "get": {
+        "summary": "",
+        "operationId": "get-users",
+        "description": "Retourne tous les users dans la base",
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "Count": {
+                      "type": "integer"
+                    },
+                    "Items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/User"
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "Count": 1,
+                      "Items": [
+                        {
+                          "id": "1111-1111-111",
+                          "FirstName": "Romain",
+                          "LastName": "Chassaigne",
+                          "Address": {
+                            "Number": "77",
+                            "Street": "Chemin de la Butte",
+                            "City": "Toulouse",
+                            "PostCode": 31400
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "example-2": {
+                    "value": {
+                      "Count": 2,
+                      "Items": [
+                        {
+                          "id": "1111-1111-111",
+                          "FirstName": "Romain",
+                          "LastName": "Chassaigne",
+                          "Address": {
+                            "Number": "77",
+                            "Street": "Chemin de la Butte",
+                            "City": "Toulouse",
+                            "PostCode": 31400
+                          }
+                        },
+                        {
+                          "id": "2222-2222-222",
+                          "FirstName": "Chloe",
+                          "LastName": "Chassaigne"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "",
+        "operationId": "post-users",
+        "description": "Ajoute un user dans la base",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/New"
+              },
+              "examples": {
+                "Example": {
+                  "value": {
+                    "FirstName": "Romain",
+                    "LastName": "Chassaigne"
+                  }
+                },
+                "example-1": {
+                  "value": {
+                    "FirstName": "string",
+                    "LastName": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "FirstName": {
+                      "type": "string"
+                    },
+                    "LastName": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "Example": {
+                    "value": {
+                      "id": "1111-111111-11111",
+                      "FirstName": "Romain",
+                      "LastName": "Chassaigne"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "title": "Users",
+        "type": "object",
+        "description": "",
+        "examples": [
+          {
+            "id": "1111-1111-111",
+            "FirstName": "Romain",
+            "LastName": "Chassaigne",
+            "Address": {
+              "Number": "77",
+              "Street": "Chemin de la Butte",
+              "City": "Toulouse",
+              "PostCode": 31400
+            }
+          },
+          {
+            "id": "1111-1111-111",
+            "FirstName": "Chloe",
+            "LastName": "Chassaigne"
+          }
+        ],
+        "x-internal": true,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "FirstName": {
+            "type": "string"
+          },
+          "LastName": {
+            "type": "string"
+          },
+          "Address": {
+            "type": "object",
+            "properties": {
+              "Number": {
+                "type": "string"
+              },
+              "Street": {
+                "type": "string"
+              },
+              "City": {
+                "type": "string"
+              },
+              "PostCode": {
+                "type": "integer"
+              }
+            }
+          }
+        },
+        "required": [
+          "id",
+          "FirstName",
+          "LastName"
+        ]
+      },
+      "New": {
+        "title": "New",
+        "type": "object",
+        "properties": {
+          "FirstName": {
+            "type": "string"
+          },
+          "LastName": {
+            "type": "string"
+          }
+        },
+        "examples": [
+          {
+            "FirstName": "Romain",
+            "LastName": "Chassaigne"
+          }
+        ]
+      },
+      "Address": {
+        "title": "Address",
+        "type": "object",
+        "properties": {
+          "Number": {
+            "type": "string"
+          },
+          "Street": {
+            "type": "string"
+          },
+          "City": {
+            "type": "string"
+          },
+          "PostCode": {
+            "type": "integer"
+          }
+        },
+        "examples": [
+          {
+            "Number": "77",
+            "Street": "Chemin de la Butte",
+            "City": "Toulouse",
+            "PostCode": 31400
+          }
+        ]
+      },
+      "Not_found": {
+        "title": "Not_found",
+        "type": "object",
+        "properties": {
+          "Status": {
+            "type": "string"
+          },
+          "Message": {
+            "type": "string"
+          }
+        },
+        "examples": [
+          {
+            "Status": "USER_NOT_FOUND",
+            "Message": "L'utilisateur n'existe pas"
+          }
+        ]
+      }
+    },
+    "requestBodies": {}
+  }
+}
