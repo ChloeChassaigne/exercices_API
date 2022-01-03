@@ -4,13 +4,9 @@ from utils import db
 app = Flask(__name__)
 
 @app.route("/user/<userId>", methods = ["GET"])
-def user(id):
+def user(userId):
     mydb = db.database()
-    user = db.user(mydb, id)
+    user = db.user(mydb, userId)
+    print(user)
     if user :
         return user
-    else :
-        return {
-        "Status": "USER_NOT_FOUND",
-        "Message": "L'utilisateur demandé n'existe pas"
-    }

@@ -29,16 +29,29 @@ def find_all(db):
 def user(db, id):
     mycol = db["customers"]
     y = mycol.find_one({"_id": ObjectId(id)})
-    return {
-            "id": str(y["_id"]),
-            "FirstName": y["FirstName"],
-            "LastName": y["LastName"],
-            "Adress" : {
-                "Number": y["Number"],
-                "Street": y["Street"],
-                "City": y["City"],
-                "PostCode": y["PostCode"]
+    if y :
+        if "Address" in y :
+            return {
+                    "id": str(y["_id"]),
+                    "FirstName": y["FirstName"],
+                    "LastName": y["LastName"],
+                    "Address" : {
+                        "Number": y["Number"],
+                        "Street": y["Street"],
+                        "City": y["City"],
+                        "PostCode": y["PostCode"]
+                    }
             }
+        else :
+            return {
+                "id": str(y["_id"]),
+                "FirstName": y["FirstName"],
+                "LastName": y["LastName"],
+            }
+    else :
+        return {
+            "Status": "USER_NOT_FOUND",
+            "Message": "L'utilisateur demandé n'existe pas"
     }
 
 if "__main__" == __name__:
