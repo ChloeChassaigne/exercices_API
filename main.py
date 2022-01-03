@@ -8,5 +8,4 @@ def user(userId):
     mydb = db.database()
     user = db.user(mydb, userId)
     print(user)
-    if user :
-        return user
+    return user
