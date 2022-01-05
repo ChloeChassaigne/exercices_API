@@ -8,6 +8,11 @@ def find_data():
     mydb = db.database()
     items = db.find_all(mydb)
     return items
+def limit_user():
+    mydb = db.database()
+    limit_user = db.limit(mydb)
+    limit = request.args.get("limit")
+    return {}
 
 @app.route("/user/<userId>", methods = ["GET"])
 def user(userId):
@@ -47,4 +52,5 @@ def adress(userId):
     mydb = db.database()
     address = db.user(mydb, userId)
     print(address)
-    return address 
+    return address
+

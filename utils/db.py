@@ -40,6 +40,15 @@ def del_user(db, id):
     mycol = db['customers']
     mycol.delete_one({"_id": ObjectId(id)})
 
+def limit(db):
+    items = []
+    mycol = db['customers']
+    y = mycol.find().limit((limit))
+    for data in y :
+        items.append(data)
+    return items
+
+
 def address(db, id):
     carnet = {
         "Number": "77",
@@ -66,4 +75,4 @@ def address(db, id):
 if "__main__" == __name__:
     mydb = database()
     #print(user(mydb, "61cae341c1a034d33b5b1ac8"))
-    user(mydb, "61cae341c1a034d33b5b1ac8")
+    print(limit(mydb))
