@@ -13,14 +13,12 @@ def add_data(db, data):
 
 def find_all(db):
     items = []
+    x = {}
     mycol = db["customers"]
-    for x in mycol.find():
-        print(x)
-        items.append({
-            "id": str(x["_id"]),
-            "FirstName": x["FirstName"],
-            "LastName": x["LastName"]
-        })
+    y = mycol.find()
+    for x in y:
+        x['_id'] = str(x['_id'])
+        items.append(x)
     return {
         "Items": items,
         "Count": mycol.count_documents({})
@@ -29,34 +27,43 @@ def find_all(db):
 def user(db, id):
     mycol = db["customers"]
     y = mycol.find_one({"_id": ObjectId(id)})
- #   print(y)
     if y :
         y['_id'] = str(y['_id'])
         return y
- #       if "Address" in y :
- #           return {
- #                   "id": str(y["_id"]),
- #                   "FirstName": y["FirstName"],
- #                   "LastName": y["LastName"],
- #                   "Address" : {
- #                       "Number": y["Number"],
- #                       "Street": y["Street"],
- #                       "City": y["City"],
- #                       "PostCode": y["PostCode"]
- #                   }
- #           }
- #       else :
- #           return {
- #               "id": str(y["_id"]),
- #               "FirstName": y["FirstName"],
- #               "LastName": y["LastName"],
- #           }
     else :
         return {
             "Status": "USER_NOT_FOUND",
             "Message": "L'utilisateur demandé n'existe pas"
     }
 
+def del_user(db, id):
+    mycol = db['customers']
+    mycol.delete_one({"_id": ObjectId(id)})
+
+def address(db, id):
+    carnet = {
+        "Number": "77",
+        "Street": "Chemin de la Butte",
+        "City": "Toulouse",
+        "PostCode": 31400
+    }
+    mycol = db['customers']
+    y = mycol.find_one({"_id": ObjectId(id)})
+    print(y)
+    if y :
+        y['_id'] = str(y['_id'])
+        if "Address" in y :
+            return y
+        else : 
+            profil = y.insert_one(carnet)
+            return profil
+    else :
+        return {
+            "Status": "USER_NOT_FOUND",
+            "Message": "L'utilisateur n'existe pas"
+    }
+
 if "__main__" == __name__:
     mydb = database()
-    print(user(mydb, "61cae341c1a034d33b5b1ac8"))
+    #print(user(mydb, "61cae341c1a034d33b5b1ac8"))
+    user(mydb, "61cae341c1a034d33b5b1ac8")
