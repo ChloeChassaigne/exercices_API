@@ -40,22 +40,20 @@ def del_user(db, id):
     mycol = db['customers']
     mycol.delete_one({"_id": ObjectId(id)})
 
-def limit(db):
+def limit(db, limit):
     items = []
-    mycol = db['customers']
-    y = mycol.find().limit((limit))
-    for data in y :
-        items.append(data)
-    return items
-
+    x = {}
+    mycol = db["customers"]
+    y = mycol.find().limit(limit)
+    for x in y:
+        x['_id'] = str(x['_id'])
+        items.append(x)
+    return {
+        "Items": items,
+        "Count": len(items)
+    }
 
 def address(db, id):
-    carnet = {
-        "Number": "77",
-        "Street": "Chemin de la Butte",
-        "City": "Toulouse",
-        "PostCode": 31400
-    }
     mycol = db['customers']
     y = mycol.find_one({"_id": ObjectId(id)})
     print(y)
@@ -64,15 +62,25 @@ def address(db, id):
         if "Address" in y :
             return y
         else : 
-            profil = y.insert_one(carnet)
-            return profil
+            return None
+    else :
+        return {
+            "Status": "USER_NOT_FOUND",
+            "Message": "L'utilisateur demandé n'existe pas"
+    }
+
+def put_address(db, id, update):
+    mycol = db['customers']
+    myquery = { "_id": ObjectId(id)}
+    newvalues = {"$set": {"Address": update}}
+    if myquery :
+        return mycol.update_one(myquery, newvalues)
     else :
         return {
             "Status": "USER_NOT_FOUND",
             "Message": "L'utilisateur n'existe pas"
     }
-
-if "__main__" == __name__:
-    mydb = database()
+#if "__main__" == __name__:
+    #mydb = database()
     #print(user(mydb, "61cae341c1a034d33b5b1ac8"))
-    print(limit(mydb))
+    #print(limit(mydb))

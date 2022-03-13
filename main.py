@@ -1,3 +1,4 @@
+from crypt import methods
 from flask import Flask, request
 from utils import db
 
@@ -6,13 +7,12 @@ app = Flask(__name__)
 @app.route('/users', methods=['GET'])
 def find_data():
     mydb = db.database()
-    items = db.find_all(mydb)
+    limit = request.args.get('limit')
+    if limit == None :
+        items = db.find_all(mydb)
+    else :
+        items = db.limit(mydb, int(limit))
     return items
-def limit_user():
-    mydb = db.database()
-    limit_user = db.limit(mydb)
-    limit = request.args.get("limit")
-    return {}
 
 @app.route("/user/<userId>", methods = ["GET"])
 def user(userId):
@@ -47,10 +47,15 @@ def del_user(userId):
     del_user = db.del_user(mydb, userId)
     return {}
 
-@app.route("/user/<userId>/address", methods = ["PUT"])
-def adress(userId):
+@app.route("/user/<userId>/address", methods = ["GET"])
+def address(userId):
     mydb = db.database()
     address = db.user(mydb, userId)
     print(address)
     return address
 
+@app.route("/user/address/<userId>", methods= ["PUT"])
+def put_address(userId):
+    mydb = db.database()
+    db.put_address(mydb, userId, request.get_json())
+    return {}
