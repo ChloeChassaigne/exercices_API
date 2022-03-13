@@ -4,6 +4,7 @@ from utils import db
 
 app = Flask(__name__)
 
+#Show all users or a limit
 @app.route('/users', methods=['GET'])
 def find_data():
     mydb = db.database()
@@ -13,14 +14,14 @@ def find_data():
     else :
         items = db.limit(mydb, int(limit))
     return items
-
+#Find a user with an Id
 @app.route("/user/<userId>", methods = ["GET"])
 def user(userId):
     mydb = db.database()
     user = db.user(mydb, userId)
     print(user)
     return user
-
+#Add a user
 @app.route("/users", methods=["POST"])
 def post_data():
     if 'FirstName' in request.get_json() and 'LastName' in request.get_json():
@@ -40,20 +41,20 @@ def post_data():
             "error": "MISSING_ELEMENTS",
             "message": "Body must contain FirstName and LastName"
         }
-
+#Delete a user with an Id
 @app.route("/user/<userId>", methods = ["DELETE"])
 def del_user(userId):
     mydb = db.database()
     del_user = db.del_user(mydb, userId)
     return {}
-
+#Show address
 @app.route("/user/<userId>/address", methods = ["GET"])
 def address(userId):
     mydb = db.database()
     address = db.user(mydb, userId)
     print(address)
     return address
-
+#Add an address
 @app.route("/user/address/<userId>", methods= ["PUT"])
 def put_address(userId):
     mydb = db.database()

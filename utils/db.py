@@ -1,16 +1,17 @@
 import pymongo
 from bson.objectid import ObjectId 
 
+#Connection database
 def database():
     myclient = pymongo.MongoClient("mongodb://localhost:27017/")
     mydb = myclient["database"]
     return mydb
-
+#Add data
 def add_data(db, data):
     mycol = db["customers"]
     x = mycol.insert_one(data)
     return x.inserted_id
-
+#Find all users and how many users
 def find_all(db):
     items = []
     x = {}
@@ -23,7 +24,7 @@ def find_all(db):
         "Items": items,
         "Count": mycol.count_documents({})
     }
-
+#Find a user with an Id
 def user(db, id):
     mycol = db["customers"]
     y = mycol.find_one({"_id": ObjectId(id)})
@@ -35,11 +36,11 @@ def user(db, id):
             "Status": "USER_NOT_FOUND",
             "Message": "L'utilisateur demandé n'existe pas"
     }
-
+#Delete user with an Id
 def del_user(db, id):
     mycol = db['customers']
     mycol.delete_one({"_id": ObjectId(id)})
-
+#Limit to show users
 def limit(db, limit):
     items = []
     x = {}
@@ -52,7 +53,7 @@ def limit(db, limit):
         "Items": items,
         "Count": len(items)
     }
-
+#Add an address a specific user (Id)
 def address(db, id):
     mycol = db['customers']
     y = mycol.find_one({"_id": ObjectId(id)})
@@ -68,7 +69,7 @@ def address(db, id):
             "Status": "USER_NOT_FOUND",
             "Message": "L'utilisateur demandé n'existe pas"
     }
-
+#Add an address a specifi user (Id)
 def put_address(db, id, update):
     mycol = db['customers']
     myquery = { "_id": ObjectId(id)}
@@ -80,6 +81,7 @@ def put_address(db, id, update):
             "Status": "USER_NOT_FOUND",
             "Message": "L'utilisateur n'existe pas"
     }
+    
 #if "__main__" == __name__:
     #mydb = database()
     #print(user(mydb, "61cae341c1a034d33b5b1ac8"))
